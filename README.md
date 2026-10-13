@@ -120,9 +120,11 @@ HTTP/1.1 200 OK
 {"status":"ok"}
 ```
 
-## REST vs gRPC: what I noticed
+## REST vs gRPC:
 
-REST was quicker to get going: I could test everything with curl and read the JSON directly. The downside was writing the input validation myself and translating HTTP status codes (like a `404` from inventory) into something meaningful for the order. gRPC needed more setup up front, with the `.proto` file and generating stubs, but after that the request and response types were enforced for me and errors came back as clear status codes like `NOT_FOUND` and `DEADLINE_EXCEEDED`. Timeouts were handled differently too: REST sets them on the HTTP client, while gRPC passes a deadline with each call. For something people or browsers call directly I'd pick REST, but for one service talking to another, gRPC felt cleaner.
+REST was quicker to get started with. I could test everything with curl and read the JSON directly. The downside was writing the input validation and translating HTTP status codes into something meaningful for the order. 
+gRPC needed more setup up front, with the `.proto` file and generating stubs, but after that the request and response types were enforced for me and errors came back as clear status codes.
+Also, in gRPC code generation via the Protobuf compiler was different than REST.
 
 ## Files
 
@@ -134,3 +136,5 @@ grpc_client.py              tiny client for calling the gRPC server directly
 inventory_pb2*.py           generated from the .proto
 requirements.txt
 ```
+
+(I have used GPT for conceptual as well as implementation understanding)
