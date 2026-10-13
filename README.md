@@ -18,13 +18,10 @@ The last command generates `inventory_pb2.py` and `inventory_pb2_grpc.py` from t
 Use two terminals, from the project directory.
 
 ```bash
-# Terminal 1: Inventory REST Service (:5001)
-python inventory_rest.py
+# Terminal 1: Inventory Service (REST :5001, gRPC :50051)
+python inventory_service.py
 
-# Terminal 2: Inventory gRPC Service (:50051)
-python inventory_grpc.py
-
-# Terminal 3: Order Service (:5000)
+# Terminal 2: Order Service (:5000); this includes the REST order path
 python order_service.py
 ```
 
@@ -87,11 +84,10 @@ An unavailable item produces HTTP `409` from the Order Service. The Inventory Se
 
 ## Evidence: timeout and deadline handling
 
-Stop both Inventory services and restart them with a 5-second artificial delay. The Order Service timeout/deadline remains 2 seconds:
+Stop the Inventory Service and restart it with a 5-second artificial delay. The Order Service timeout/deadline remains 2 seconds:
 
 ```bash
-python inventory_rest.py --delay 5
-python inventory_grpc.py --delay 5
+python inventory_service.py --delay 5
 ```
 
 Now run either request again. Both return HTTP `504`, but the Order Service remains running and can accept later requests:
@@ -131,8 +127,7 @@ REST was straightforward to inspect and test because requests and responses were
 
 ```text
 proto/inventory.proto   gRPC service contract
-inventory_rest.py       Inventory REST server
-inventory_grpc.py       Inventory gRPC server
+inventory_service.py    Inventory REST and gRPC servers
 order_service.py        Order REST API and REST/gRPC clients
 requirements.txt        Python dependencies
 ```
